@@ -1,0 +1,14 @@
+syntax = "proto3";
+package tbruyelle.nebula.sbt;
+
+import "gogoproto/gogo.proto";
+import "sbt/params.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/tbruyelle/nebula/x/sbt/types";
+
+// GenesisState defines the sbt module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  // this line is used by starport scaffolding # genesis/proto/state
+}
