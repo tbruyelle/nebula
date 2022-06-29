@@ -1,0 +1,10 @@
+syntax = "proto3";
+package sbt.sbt;
+option go_package = "nebulla/x/sbt/types";
+
+message Soul {
+  string creator = 1;
+  uint64 id = 2;
+  string name = 3; 
+  string description = 4; 
+}

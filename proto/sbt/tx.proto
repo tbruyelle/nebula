@@ -7,7 +7,18 @@ option go_package = "github.com/tbruyelle/nebula/x/sbt/types";
 
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+      rpc CreateSoul(MsgCreateSoul) returns (MsgCreateSoulResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgCreateSoul {
+  string creator = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message MsgCreateSoulResponse {
+  uint64 id = 1;
 }
 
 // this line is used by starport scaffolding # proto/tx/message
