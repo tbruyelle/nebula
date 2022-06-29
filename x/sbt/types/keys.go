@@ -25,7 +25,7 @@ const (
 // - 0x01: nextSoulID
 var (
 	SoulKeyPrefix = []byte{0x00}
-	SoulIDKey     = []byte{0x01}
+	SoulCountKey  = []byte{0x01}
 )
 
 func GetSoulIDBytes(soulID uint64) []byte {

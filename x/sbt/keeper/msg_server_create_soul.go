@@ -9,9 +9,11 @@ import (
 
 func (k msgServer) CreateSoul(goCtx context.Context, msg *types.MsgCreateSoul) (*types.MsgCreateSoulResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	// TODO: Handling the message
-	_ = ctx
-
-	return &types.MsgCreateSoulResponse{}, nil
+	soul := types.Soul{
+		Creator:     msg.Creator,
+		Name:        msg.Name,
+		Description: msg.Description,
+	}
+	id := k.AppendSoul(ctx, soul)
+	return &types.MsgCreateSoulResponse{Id: id}, nil
 }

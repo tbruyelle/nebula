@@ -1,6 +1,6 @@
 syntax = "proto3";
-package sbt.sbt;
-option go_package = "nebulla/x/sbt/types";
+package tbruyelle.nebula.sbt;
+option go_package = "github.com/tbruyelle/nebula/x/sbt/types";
 
 message Soul {
   string creator = 1;
