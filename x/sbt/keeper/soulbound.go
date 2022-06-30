@@ -12,7 +12,7 @@ func (k Keeper) AppendSoulBound(ctx sdk.Context, sb types.SoulBound) uint64 {
 		panic(err)
 	}
 	store := ctx.KVStore(k.storeKey)
-	store.Set(types.SoulKey(sb.Id), bz)
+	store.Set(types.SoulBoundKey(sb.Id), bz)
 	k.SetSoulBoundCount(ctx, sb.Id)
 	return sb.Id
 }

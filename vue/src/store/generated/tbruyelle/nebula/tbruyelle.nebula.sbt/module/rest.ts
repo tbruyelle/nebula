@@ -43,6 +43,21 @@ export interface SbtQueryParamsResponse {
   params?: SbtParams;
 }
 
+export interface SbtQuerySoulBoundsResponse {
+  SoulBound?: SbtSoulBoundResponse[];
+
+  /**
+   * PageResponse is to be embedded in gRPC response messages where the
+   * corresponding request message has used PageRequest.
+   *
+   *  message SomeResponse {
+   *          repeated Bar results = 1;
+   *          PageResponse page = 2;
+   *  }
+   */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface SbtQuerySoulsResponse {
   Soul?: SbtSoul[];
 
@@ -68,6 +83,24 @@ export interface SbtSoul {
 
   /** @format int64 */
   createdAt?: string;
+}
+
+export interface SbtSoulBoundResponse {
+  /** @format uint64 */
+  id?: string;
+
+  /** @format uint64 */
+  soulID?: string;
+  name?: string;
+  description?: string;
+  owner?: string;
+
+  /** @format int64 */
+  boundAt?: string;
+
+  /** @format int64 */
+  createdAt?: string;
+  creator?: string;
 }
 
 /**
@@ -341,6 +374,33 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     this.request<SbtQueryParamsResponse, RpcStatus>({
       path: `/tbruyelle/nebula/sbt/params`,
       method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySoulbounds
+   * @summary Queries a list of Soulbounds items.
+   * @request GET:/tbruyelle/nebula/sbt/soulbounds/{owner}
+   */
+  querySoulbounds = (
+    owner: string,
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<SbtQuerySoulBoundsResponse, RpcStatus>({
+      path: `/tbruyelle/nebula/sbt/soulbounds/${owner}`,
+      method: "GET",
+      query: query,
       format: "json",
       ...params,
     });

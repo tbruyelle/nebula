@@ -17,11 +17,16 @@ service Query {
     option (google.api.http).get = "/tbruyelle/nebula/sbt/params";
   }
   // Queries a list of Souls items.
-	rpc Souls(QuerySoulsRequest) returns (QuerySoulsResponse) {
-		option (google.api.http).get = "/tbruyelle/nebula/sbt/souls/{creator}";
-	}
+  rpc Souls(QuerySoulsRequest) returns (QuerySoulsResponse) {
+    option (google.api.http).get = "/tbruyelle/nebula/sbt/souls/{creator}";
+  }
 
-// this line is used by starport scaffolding # 2
+  // Queries a list of Soulbounds items.
+  rpc Soulbounds(QuerySoulBoundsRequest) returns (QuerySoulBoundsResponse) {
+    option (google.api.http).get = "/tbruyelle/nebula/sbt/soulbounds/{owner}";
+  }
+
+  // this line is used by starport scaffolding # 2
 }
 
 // QueryParamsRequest is request type for the Query/Params RPC method.
@@ -44,5 +49,27 @@ message QuerySoulsResponse {
   // Adding pagination to response
   cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
+
+message QuerySoulBoundsRequest {
+  string owner = 1;
+  // Adding pagination to request
+  cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QuerySoulBoundsResponse {
+  repeated SoulBoundResponse SoulBound = 1;
+  // Adding pagination to response
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+message SoulBoundResponse {
+  uint64 id = 1;
+  uint64 soulID = 2;
+  string name = 3;
+  string description = 4;
+  string owner = 5;
+  int64 boundAt = 6;
+  int64 createdAt = 7;
+  string creator = 9;
+};
 
 // this line is used by starport scaffolding # 3

@@ -9,7 +9,7 @@ export interface SoulBound {
   owner: string;
   id: number;
   soulID: number;
-  createdAt: number;
+  boundAt: number;
 }
 
 const baseSoulBound: object = {
@@ -17,7 +17,7 @@ const baseSoulBound: object = {
   owner: "",
   id: 0,
   soulID: 0,
-  createdAt: 0,
+  boundAt: 0,
 };
 
 export const SoulBound = {
@@ -34,8 +34,8 @@ export const SoulBound = {
     if (message.soulID !== 0) {
       writer.uint32(32).uint64(message.soulID);
     }
-    if (message.createdAt !== 0) {
-      writer.uint32(40).int64(message.createdAt);
+    if (message.boundAt !== 0) {
+      writer.uint32(40).int64(message.boundAt);
     }
     return writer;
   },
@@ -60,7 +60,7 @@ export const SoulBound = {
           message.soulID = longToNumber(reader.uint64() as Long);
           break;
         case 5:
-          message.createdAt = longToNumber(reader.int64() as Long);
+          message.boundAt = longToNumber(reader.int64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -92,10 +92,10 @@ export const SoulBound = {
     } else {
       message.soulID = 0;
     }
-    if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = Number(object.createdAt);
+    if (object.boundAt !== undefined && object.boundAt !== null) {
+      message.boundAt = Number(object.boundAt);
     } else {
-      message.createdAt = 0;
+      message.boundAt = 0;
     }
     return message;
   },
@@ -106,7 +106,7 @@ export const SoulBound = {
     message.owner !== undefined && (obj.owner = message.owner);
     message.id !== undefined && (obj.id = message.id);
     message.soulID !== undefined && (obj.soulID = message.soulID);
-    message.createdAt !== undefined && (obj.createdAt = message.createdAt);
+    message.boundAt !== undefined && (obj.boundAt = message.boundAt);
     return obj;
   },
 
@@ -132,10 +132,10 @@ export const SoulBound = {
     } else {
       message.soulID = 0;
     }
-    if (object.createdAt !== undefined && object.createdAt !== null) {
-      message.createdAt = object.createdAt;
+    if (object.boundAt !== undefined && object.boundAt !== null) {
+      message.boundAt = object.boundAt;
     } else {
-      message.createdAt = 0;
+      message.boundAt = 0;
     }
     return message;
   },

@@ -16,12 +16,14 @@ func (k msgServer) BindSoul(goCtx context.Context, msg *types.MsgBindSoul) (*typ
 	if !ok {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("soul %d doesn't exist", msg.SoulID))
 	}
+	//TODO: check if not already bound
+	//TODO: check creator and owner account exists
 
 	sb := types.SoulBound{
-		Creator:   msg.Creator,
-		Owner:     msg.Owner,
-		SoulID:    msg.SoulID,
-		CreatedAt: ctx.BlockHeight(),
+		Creator: msg.Creator,
+		Owner:   msg.Owner,
+		SoulID:  msg.SoulID,
+		BoundAt: ctx.BlockHeight(),
 	}
 	id := k.AppendSoulBound(ctx, sb)
 	return &types.MsgBindSoulResponse{Id: id}, nil

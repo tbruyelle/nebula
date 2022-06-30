@@ -7,5 +7,5 @@ message SoulBound {
   string owner = 2;
   uint64 id = 3;
   uint64 soulID = 4;
-  int64 createdAt = 5;
+  int64 boundAt = 5;
 }
