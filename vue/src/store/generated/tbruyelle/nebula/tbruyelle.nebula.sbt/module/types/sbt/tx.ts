@@ -14,6 +14,16 @@ export interface MsgCreateSoulResponse {
   id: number;
 }
 
+export interface MsgBindSoul {
+  creator: string;
+  owner: string;
+  soulID: number;
+}
+
+export interface MsgBindSoulResponse {
+  id: number;
+}
+
 const baseMsgCreateSoul: object = { creator: "", name: "", description: "" };
 
 export const MsgCreateSoul = {
@@ -164,10 +174,158 @@ export const MsgCreateSoulResponse = {
   },
 };
 
+const baseMsgBindSoul: object = { creator: "", owner: "", soulID: 0 };
+
+export const MsgBindSoul = {
+  encode(message: MsgBindSoul, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.owner !== "") {
+      writer.uint32(18).string(message.owner);
+    }
+    if (message.soulID !== 0) {
+      writer.uint32(24).uint64(message.soulID);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgBindSoul {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgBindSoul } as MsgBindSoul;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string();
+          break;
+        case 2:
+          message.owner = reader.string();
+          break;
+        case 3:
+          message.soulID = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgBindSoul {
+    const message = { ...baseMsgBindSoul } as MsgBindSoul;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = String(object.owner);
+    } else {
+      message.owner = "";
+    }
+    if (object.soulID !== undefined && object.soulID !== null) {
+      message.soulID = Number(object.soulID);
+    } else {
+      message.soulID = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: MsgBindSoul): unknown {
+    const obj: any = {};
+    message.creator !== undefined && (obj.creator = message.creator);
+    message.owner !== undefined && (obj.owner = message.owner);
+    message.soulID !== undefined && (obj.soulID = message.soulID);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgBindSoul>): MsgBindSoul {
+    const message = { ...baseMsgBindSoul } as MsgBindSoul;
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
+    }
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = object.owner;
+    } else {
+      message.owner = "";
+    }
+    if (object.soulID !== undefined && object.soulID !== null) {
+      message.soulID = object.soulID;
+    } else {
+      message.soulID = 0;
+    }
+    return message;
+  },
+};
+
+const baseMsgBindSoulResponse: object = { id: 0 };
+
+export const MsgBindSoulResponse = {
+  encode(
+    message: MsgBindSoulResponse,
+    writer: Writer = Writer.create()
+  ): Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).uint64(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgBindSoulResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input;
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = { ...baseMsgBindSoulResponse } as MsgBindSoulResponse;
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = longToNumber(reader.uint64() as Long);
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgBindSoulResponse {
+    const message = { ...baseMsgBindSoulResponse } as MsgBindSoulResponse;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id);
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+
+  toJSON(message: MsgBindSoulResponse): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<MsgBindSoulResponse>): MsgBindSoulResponse {
+    const message = { ...baseMsgBindSoulResponse } as MsgBindSoulResponse;
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id;
+    } else {
+      message.id = 0;
+    }
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
-  /** this line is used by starport scaffolding # proto/tx/rpc */
   CreateSoul(request: MsgCreateSoul): Promise<MsgCreateSoulResponse>;
+  /** this line is used by starport scaffolding # proto/tx/rpc */
+  BindSoul(request: MsgBindSoul): Promise<MsgBindSoulResponse>;
 }
 
 export class MsgClientImpl implements Msg {
@@ -185,6 +343,16 @@ export class MsgClientImpl implements Msg {
     return promise.then((data) =>
       MsgCreateSoulResponse.decode(new Reader(data))
     );
+  }
+
+  BindSoul(request: MsgBindSoul): Promise<MsgBindSoulResponse> {
+    const data = MsgBindSoul.encode(request).finish();
+    const promise = this.rpc.request(
+      "tbruyelle.nebula.sbt.Msg",
+      "BindSoul",
+      data
+    );
+    return promise.then((data) => MsgBindSoulResponse.decode(new Reader(data)));
   }
 }
 

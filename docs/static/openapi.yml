@@ -51680,6 +51680,12 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
+  tbruyelle.nebula.sbt.MsgBindSoulResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uint64
   tbruyelle.nebula.sbt.MsgCreateSoulResponse:
     type: object
     properties:

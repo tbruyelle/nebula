@@ -23,9 +23,13 @@ const (
 //
 // - 0x00<soulID_Bytes>: Soul
 // - 0x01: nextSoulID
+// - 0x02<soulBoundID_Bytes>: SoulBound
+// - 0x03: nextSoulBoundID
 var (
-	SoulKeyPrefix = []byte{0x00}
-	SoulCountKey  = []byte{0x01}
+	SoulKeyPrefix      = []byte{0x00}
+	SoulCountKey       = []byte{0x01}
+	SoulBoundKeyPrefix = []byte{0x02}
+	SoulBoundCountKey  = []byte{0x03}
 )
 
 func GetSoulIDBytes(soulID uint64) []byte {
@@ -40,6 +44,20 @@ func GetSoulIDFromBytes(bz []byte) uint64 {
 
 func SoulKey(soulID uint64) []byte {
 	return append(SoulKeyPrefix, GetSoulIDBytes(soulID)...)
+}
+
+func GetSoulBoundIDBytes(soulBoundID uint64) []byte {
+	bz := make([]byte, 8)
+	binary.BigEndian.PutUint64(bz, soulBoundID)
+	return bz
+}
+
+func GetSoulBoundIDFromBytes(bz []byte) uint64 {
+	return binary.BigEndian.Uint64(bz)
+}
+
+func SoulBoundKey(soulBoundID uint64) []byte {
+	return append(SoulBoundKeyPrefix, GetSoulBoundIDBytes(soulBoundID)...)
 }
 
 func KeyPrefix(p string) []byte {

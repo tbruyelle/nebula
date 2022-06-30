@@ -20,6 +20,11 @@ export interface RpcStatus {
   details?: ProtobufAny[];
 }
 
+export interface SbtMsgBindSoulResponse {
+  /** @format uint64 */
+  id?: string;
+}
+
 export interface SbtMsgCreateSoulResponse {
   /** @format uint64 */
   id?: string;

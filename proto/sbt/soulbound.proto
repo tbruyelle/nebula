@@ -1,0 +1,11 @@
+syntax = "proto3";
+package tbruyelle.nebula.sbt;
+option go_package = "github.com/tbruyelle/nebula/x/sbt/types";
+
+message SoulBound {
+  string creator = 1;
+  string owner = 2;
+  uint64 id = 3;
+  uint64 soulID = 4;
+  int64 createdAt = 5;
+}

@@ -2,9 +2,10 @@ import { txClient, queryClient, MissingWalletError , registry} from './module'
 
 import { Params } from "./module/types/sbt/params"
 import { Soul } from "./module/types/sbt/soul"
+import { SoulBound } from "./module/types/sbt/soulbound"
 
 
-export { Params, Soul };
+export { Params, Soul, SoulBound };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -48,6 +49,7 @@ const getDefaultState = () => {
 				_Structure: {
 						Params: getStructure(Params.fromPartial({})),
 						Soul: getStructure(Soul.fromPartial({})),
+						SoulBound: getStructure(SoulBound.fromPartial({})),
 						
 		},
 		_Registry: registry,
@@ -185,6 +187,21 @@ export default {
 				}
 			}
 		},
+		async sendMsgBindSoul({ rootGetters }, { value, fee = [], memo = '' }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgBindSoul(value)
+				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
+	gas: "200000" }, memo})
+				return result
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgBindSoul:Init Could not initialize signing client. Wallet is required.')
+				}else{
+					throw new Error('TxClient:MsgBindSoul:Send Could not broadcast Tx: '+ e.message)
+				}
+			}
+		},
 		
 		async MsgCreateSoul({ rootGetters }, { value }) {
 			try {
@@ -196,6 +213,19 @@ export default {
 					throw new Error('TxClient:MsgCreateSoul:Init Could not initialize signing client. Wallet is required.')
 				} else{
 					throw new Error('TxClient:MsgCreateSoul:Create Could not create message: ' + e.message)
+				}
+			}
+		},
+		async MsgBindSoul({ rootGetters }, { value }) {
+			try {
+				const txClient=await initTxClient(rootGetters)
+				const msg = await txClient.msgBindSoul(value)
+				return msg
+			} catch (e) {
+				if (e == MissingWalletError) {
+					throw new Error('TxClient:MsgBindSoul:Init Could not initialize signing client. Wallet is required.')
+				} else{
+					throw new Error('TxClient:MsgBindSoul:Create Could not create message: ' + e.message)
 				}
 			}
 		},
