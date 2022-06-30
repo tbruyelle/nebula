@@ -7,4 +7,5 @@ message Soul {
   uint64 id = 2;
   string name = 3; 
   string description = 4; 
+  int64 createdAt = 5;
 }
