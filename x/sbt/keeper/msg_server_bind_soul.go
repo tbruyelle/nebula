@@ -11,6 +11,14 @@ import (
 
 func (k msgServer) BindSoul(goCtx context.Context, msg *types.MsgBindSoul) (*types.MsgBindSoulResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+	accCreator, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return nil, err
+	}
+	accOwner, err := sdk.AccAddressFromBech32(msg.Owner)
+	if err != nil {
+		return nil, err
+	}
 
 	_, ok := k.GetSoul(ctx, msg.SoulID)
 	if !ok {
@@ -20,8 +28,8 @@ func (k msgServer) BindSoul(goCtx context.Context, msg *types.MsgBindSoul) (*typ
 	//TODO: check creator and owner account exists
 
 	sb := types.SoulBound{
-		Creator: msg.Creator,
-		Owner:   msg.Owner,
+		Creator: accCreator.String(),
+		Owner:   accOwner.String(),
 		SoulID:  msg.SoulID,
 		BoundAt: ctx.BlockHeight(),
 	}

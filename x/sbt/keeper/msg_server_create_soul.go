@@ -9,8 +9,12 @@ import (
 
 func (k msgServer) CreateSoul(goCtx context.Context, msg *types.MsgCreateSoul) (*types.MsgCreateSoulResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
+	acc, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return nil, err
+	}
 	soul := types.Soul{
-		Creator:     msg.Creator,
+		Creator:     acc.String(),
 		Name:        msg.Name,
 		Description: msg.Description,
 		CreatedAt:   ctx.BlockHeight(),
